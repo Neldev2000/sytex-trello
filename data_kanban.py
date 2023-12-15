@@ -84,7 +84,7 @@ def sytex_to_trello(sytex, trello):
     update_cards = intersects(sytex, trello)
     for card in update_cards:
         c = find(card['name'], trello)
-        if c['idList'] == card['idList']: continue
+        #if c['idList'] == card['idList']: continue
         url = f"https://api.trello.com/1/cards/{c['id']}"
         headers = {
             "Accept": "application/json"
