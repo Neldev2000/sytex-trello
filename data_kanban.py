@@ -1,5 +1,7 @@
 import requests
 import datetime
+import schedule
+import time
 
 today = datetime.datetime.now()
 today = f"{today.year}-{today.month}-{today.day}"
@@ -153,8 +155,13 @@ def crear_desde_solicitudes():
     
     return r
 
+def main():
+    r = crear_desde_solicitudes()
+    if r> 0:
+        sytex = obtener_proyectos()
+    sytex_to_trello()
 
-r = crear_desde_solicitudes()
-if r> 0:
-    sytex = obtener_proyectos()
-sytex_to_trello()
+schedule.every(5).minutes.do(main)
+while True:
+    schedule.run_pending()
+    time.sleep(1)
