@@ -163,5 +163,6 @@ def main():
 
 schedule.every(1).minutes.do(main)
 while True:
+    print('Hola')
     schedule.run_pending()
-    time.sleep(1)
+    time.sleep(1)   
