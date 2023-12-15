@@ -1,6 +1,5 @@
 import requests
 import datetime
-import schedule
 import time
 
 today = datetime.datetime.now()
@@ -11,14 +10,14 @@ headers_sytex = {
 }
 
 estado_lista = {
-    "Solicitud Comercial": "657c7536339e982ac6c3563b",
-    "En Proyeccion" : "657b5f4e493588d965d8ac9c",
-    "Desarrollo de Informes":"657c6d705e57f03a9f88a5aa",
-    "Por Despachar":"657b5f66daa64699072ecfe5",
-    "Ejecucion": "657b5f6b553f8adbf6afb73d",
-    "Recibido de Obra":"657b5f75a8de7a55cfbd2c48",
-    "Documentacion":"657b5f842130237dd5dcf658",
-    "Por Pagar":"657b5f86dd04cf5ff2ae4d79"
+    "01-Solicitud Comercial": "657c7536339e982ac6c3563b",
+    "02-En Proyeccion" : "657b5f4e493588d965d8ac9c",
+    "03-Desarrollo de Informes":"657c6d705e57f03a9f88a5aa",
+    "04-Por Despachar":"657b5f66daa64699072ecfe5",
+    "05-Ejecucion": "657b5f6b553f8adbf6afb73d",
+    "06-Recibido de Obra":"657b5f75a8de7a55cfbd2c48",
+    "07-Documentacion":"657b5f842130237dd5dcf658",
+    "08-Por Pagar":"657b5f86dd04cf5ff2ae4d79"
 }
 query_trello = {
   'key': '259afd2122eef1ba77bfd053dc33db85',
@@ -37,7 +36,8 @@ def obtener_proyectos():
 
     data = []
     for p in proyectos:
-        estado = 'Solicitud Comercial' if (p['last_milestone_completed'] is None) else p['last_milestone_completed']['name']
+
+        estado = '01-Solicitud Comercial' if (p['last_milestone_completed'] is None) else p['last_milestone_completed']['name']
         if estado not in estado_lista.keys(): continue
         d = {
             'name' : p['network_element']['name'],
@@ -66,8 +66,7 @@ def obtener_cartas():
     return response
 
 
-sytex = obtener_proyectos()
-trello = obtener_cartas()
+
 
 difference = lambda a, b: [x for x in a if x['name'] not in [y['name'] for y in b]]
 intersects = lambda a, b: [x for x in a if x['name'] in [y['name'] for y in b]]
@@ -78,11 +77,14 @@ def find(name, array):
             return a
     return {}
 
-def sytex_to_trello():   
+
+
+def sytex_to_trello(sytex, trello):   
     new_card = difference(sytex, trello)
     update_cards = intersects(sytex, trello)
     for card in update_cards:
         c = find(card['name'], trello)
+        if c['idList'] == card['idList']: continue
         url = f"https://api.trello.com/1/cards/{c['id']}"
         headers = {
             "Accept": "application/json"
@@ -122,12 +124,12 @@ def sytex_to_trello():
     print('Creado nuevos proyectos')
 
 
-def crear_desde_solicitudes():
+def crear_desde_solicitudes(sytex, trello):
     solicitudes_nuevas = difference(trello, sytex)
     r = len(solicitudes_nuevas)
     print(r)
     for solicitud in solicitudes_nuevas:
-        if solicitud['idList'] != estado_lista['Solicitud Comercial']:continue
+        if solicitud['idList'] != estado_lista['01-Solicitud Comercial']:continue
         query = {
             'code' : solicitud['name'],
             'description': solicitud['name'],
@@ -156,13 +158,12 @@ def crear_desde_solicitudes():
     return r
 
 def main():
-    r = crear_desde_solicitudes()
+    sytex = obtener_proyectos()
+    trello = obtener_cartas()
+    r = crear_desde_solicitudes(sytex, trello)
     if r> 0:
         sytex = obtener_proyectos()
-    sytex_to_trello()
-
-#chedule.every(1).minutes.do(main)
+    sytex_to_trello(sytex, trello)
 while True:
-    print('Hola')
-    #schedule.run_pending()
-    time.sleep(1)   
+    main() 
+    time.sleep(30)
