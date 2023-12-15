@@ -161,7 +161,7 @@ def main():
         sytex = obtener_proyectos()
     sytex_to_trello()
 
-schedule.every(5).minutes.do(main)
+schedule.every(1).minutes.do(main)
 while True:
     schedule.run_pending()
     time.sleep(1)
