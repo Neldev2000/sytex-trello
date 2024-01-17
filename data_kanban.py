@@ -1,6 +1,13 @@
 import requests
 import datetime
 import time
+import json
+
+with open('tableros.json') as f:
+    tableros = json.load(f)
+with open('listas.json') as f:
+    listas = json.load(f)
+
 
 today = datetime.datetime.now()
 today = f"{today.year}-{today.month}-{today.day}"
@@ -25,31 +32,32 @@ query_trello = {
 }
 
 
-def obtener_proyectos():
+def obtener_proyectos(sucursal):
     url = 'https://app.sytex.io/api/workstructure/'
     proyectos = []
     while url is not None:
         response = requests.get(url, headers=headers_sytex)
         res = response.json()['results']
         url = response.json()['next']
-        proyectos = proyectos+ [r for r in res if r['name'] == 'Flujo Proyecto Base']
+        proyectos = proyectos+ [r for r in res if (r['name'] == 'Flujo Proyecto Base')]
 
     data = []
     for p in proyectos:
 
         estado = '01-Solicitud Comercial' if (p['last_milestone_completed'] is None) else p['last_milestone_completed']['name']
-        if estado not in estado_lista.keys(): continue
+        if estado not in listas[sucursal].keys(): continue
+        if sucursal not in p['network_element']['name']: continue
+
         d = {
-            'name' : p['network_element']['name'],
-            'idList' : estado_lista[estado],
+            'name' : p['network_element']['name'][4:],
+            'idList' : listas[sucursal][estado],
             'desc' : f"https://app.sytex.io/o/185/{p['_url_display']}"
         }
         data.append(d)
     return data
 
-def obtener_cartas():
-    id_proyecto ="657b5f2862e12b6ada2e11cf"
-    url = f"https://api.trello.com/1/boards/{id_proyecto}/cards"
+def obtener_cartas(sucursal):
+    url = f"https://api.trello.com/1/boards/{tableros[sucursal]}/cards"
     query = {
         'fields' : 'name,idList,desc',
         'key': '259afd2122eef1ba77bfd053dc33db85',
@@ -124,21 +132,22 @@ def sytex_to_trello(sytex, trello):
     print('Creado nuevos proyectos')
 
 
-def crear_desde_solicitudes(sytex, trello):
+def crear_desde_solicitudes(sytex, trello, sucursal):
     solicitudes_nuevas = difference(trello, sytex)
     r = len(solicitudes_nuevas)
     print(r)
     for solicitud in solicitudes_nuevas:
-        if solicitud['idList'] != estado_lista['01-Solicitud Comercial']:continue
+        if solicitud['idList'] != listas[sucursal]['01-Solicitud Comercial']:continue
+        zona = f"{sucursal}-{solicitud['name']}"
         query = {
-            'code' : solicitud['name'],
-            'description': solicitud['name'],
+            'code' : zona,
+            'description': zona,
             'ne_type' : 314,
             'Organization': 185
         }
         requests.post("https://app.sytex.io/api/networkelement/", json = query, headers= headers_sytex)
         query = {
-            'name' : solicitud['name'],
+            'name' : zona,
             'operational_unit': "283",
             'client': "26421",
             'start_date': today,
@@ -147,8 +156,8 @@ def crear_desde_solicitudes(sytex, trello):
         }
         requests.post("https://app.sytex.io/api/project/", json = query, headers= headers_sytex)
         query = {
-            'network_element' : solicitud['name'],
-            'project': solicitud['name'],
+            'network_element' :zona,
+            'project': zona,
             'template': "WST-0527",
             '_class' : 'importer'
         }
@@ -158,12 +167,15 @@ def crear_desde_solicitudes(sytex, trello):
     return r
 
 def main():
-    sytex = obtener_proyectos()
-    trello = obtener_cartas()
-    r = crear_desde_solicitudes(sytex, trello)
-    if r> 0:
-        sytex = obtener_proyectos()
-    sytex_to_trello(sytex, trello)
+    sucursales = ['TGR', 'AAO', 'TBR', 'CDB', 'VAL']
+    for sucursal in sucursales:
+        print(sucursal)
+        sytex = obtener_proyectos(sucursal)
+        print(sytex)
+        trello = obtener_cartas(sucursal)
+        r = crear_desde_solicitudes(sytex, trello, sucursal)
+        if r> 0:
+            sytex = obtener_proyectos(sucursal)
+        sytex_to_trello(sytex, trello)
 while True:
-    main() 
-    time.sleep(30)
+    main()
