@@ -167,11 +167,10 @@ def crear_desde_solicitudes(sytex, trello, sucursal):
     return r
 
 def main():
-    sucursales = ['TGR', 'AAO', 'TBR', 'CDB', 'VAL']
+    sucursales = ['TST','PZO','TGR', 'AAO', 'TBR', 'CDB', 'VAL']
     for sucursal in sucursales:
         print(sucursal)
         sytex = obtener_proyectos(sucursal)
-        print(sytex)
         trello = obtener_cartas(sucursal)
         r = crear_desde_solicitudes(sytex, trello, sucursal)
         if r> 0:
