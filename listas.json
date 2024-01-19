@@ -1,13 +1,13 @@
 {
     "PZO" : {
-        "01-Solicitud Comercial": "657c7536339e982ac6c3563b",
-        "02-En Proyeccion" : "657b5f4e493588d965d8ac9c",
-        "03-Desarrollo de Informes":"657c6d705e57f03a9f88a5aa",
-        "04-Por Despachar":"657b5f66daa64699072ecfe5",
-        "05-Ejecucion": "657b5f6b553f8adbf6afb73d",
-        "06-Recibido de Obra":"657b5f75a8de7a55cfbd2c48",
-        "07-Documentacion":"657b5f842130237dd5dcf658",
-        "08-Por Pagar":"657b5f86dd04cf5ff2ae4d79"
+        "01-Solicitud Comercial": "65a9c69897d085cb3eb3d7d6",
+        "02-En Proyeccion" : "65a9c6a44e6f11e85639edc1",
+        "03-Desarrollo de Informes":"65a9c6ac2b69beebef5d64ce",
+        "04-Por Despachar":"65a9c6b2c4235be27d99e147",
+        "05-Ejecucion": "65a9c6b8067f9d95779cde59",
+        "06-Recibido de Obra":"65a9c6bf8885f783dc9037b7",
+        "07-Documentacion":"65a9c6c53c90446e78188250",
+        "08-Por Pagar":"65a9c6cc5fc9a30a12ed5323"
     }, 
     "AAO" : {
         "01-Solicitud Comercial": "65a7f3acfb18b161d9272dfd",
