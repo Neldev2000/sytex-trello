@@ -178,3 +178,4 @@ def main():
         sytex_to_trello(sytex, trello)
 while True:
     main()
+    time.sleep(60*5)
