@@ -167,7 +167,7 @@ def crear_desde_solicitudes(sytex, trello, sucursal):
     return r
 
 def main():
-    sucursales = ['TST', 'pzo','TGR', 'AAO', 'TBR', 'CDB', 'VAL']
+    sucursales = ['pzo','TGR', 'AAO', 'TBR', 'CDB', 'VAL']
     for sucursal in sucursales:
         print(sucursal)
         sytex = obtener_proyectos(sucursal)
@@ -178,4 +178,4 @@ def main():
         sytex_to_trello(sytex, trello)
 while True:
     main()
-    time.sleep(60*5)
+    time.sleep(60)
