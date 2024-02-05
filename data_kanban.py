@@ -70,10 +70,10 @@ def obtener_cartas(sucursal):
 
 
 
-lista_proyectos_nuevos = lambda a, b: [x for x in a if x['name'] not in [y['name'] for y in b]]
+lista_proyectos_nuevos = lambda sytex, trello: [x for x in trello if x['name'] not in [y['name'] for y in sytex]]
 
 
-lista_actualizacion_cartas = lambda a, b: [x for x in a if x['name'] in [y['name'] for y in b]]
+lista_actualizacion_cartas = lambda sytex, trello: [x for x in sytex if x['name'] in [y['name'] for y in trello]]
 
 
 
@@ -231,14 +231,16 @@ def actualizar(solicitud, trello):
 def actualizar_proyectos(actualizar_tarjetas, trello):
     for solicitud in actualizar_tarjetas: actualizar(solicitud, trello)
 #   MAIN
-
+from pprint import pprint
 def exe():
     sucursales = ['AAO', 'pzo', 'TBR', 'TGR', 'VAL', 'CDB']
+    
+    
     for sucursal in sucursales:
         print(sucursal)
         sytex = obtener_proyectos(sucursal)
         trello = obtener_cartas(sucursal)
-
+        
         proyectos_nuevos = lista_proyectos_nuevos(sytex, trello)
         actualizar_tarjetas = lista_actualizacion_cartas(sytex, trello)
         if len(proyectos_nuevos) > 0:
