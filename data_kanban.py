@@ -88,7 +88,6 @@ def find(name, array):
 def sytex_to_trello(sytex, trello):  
     new_card = lista_proyectos_nuevos(sytex, trello)
     update_cards = lista_actualizacion_cartas(sytex, trello)
-    print(new_card)
     for card in update_cards:
         c = find(card['name'], trello)
         #if c['idList'] == card['idList']: continue
@@ -166,12 +165,8 @@ def crear_workflow(zona):
         }
     res = requests.post("https://app.sytex.io/api/import/WorkStructureImport/go/", json = query, headers= headers_sytex)
     res = res.json()
-    if 'code' not in res.keys():
-        print(zona, res)
-    print(res['code'])
     res = requests.get(f"https://app.sytex.io/api/workstructure/?q={res['code']}", headers=headers_sytex)
     res = res.json()['results'][0]
-    print(res['_url_display'])
     return f"https://app.sytex.io/o/185/{res['_url_display']}"
 
 def actualizar_description_proyectos(sucursal, description, id):
@@ -193,7 +188,6 @@ def actualizar_description_proyectos(sucursal, description, id):
 
 def ejecutar_proyecto(sucursal, solicitud):
     zona = f"{sucursal}-{solicitud['name']}"
-    print(zona)
     crear_elemento_red(zona)
     crear_proyecto(zona)
 
@@ -231,7 +225,6 @@ def cambiar_estado(solicitud, id):
             params=query
         )
 def actualizar(solicitud, trello):
-    print(solicitud)
     id = find(solicitud['name'], trello)['id']
     cambiar_estado(solicitud, id)
     pass
