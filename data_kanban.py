@@ -234,7 +234,7 @@ def actualizar_proyectos(actualizar_tarjetas, trello):
 from pprint import pprint
 def exe():
     sucursales = ['AAO', 'pzo', 'TBR', 'TGR', 'VAL', 'CDB']
-    
+    #sucursales = ['AAO']
     
     for sucursal in sucursales:
         print(sucursal)
@@ -243,12 +243,14 @@ def exe():
         
         proyectos_nuevos = lista_proyectos_nuevos(sytex, trello)
         actualizar_tarjetas = lista_actualizacion_cartas(sytex, trello)
+        
         if len(proyectos_nuevos) > 0:
             print("\tCreando Proyectos")
             crear_nuevos_proyectos(proyectos_nuevos,sucursal)
         if len(actualizar_tarjetas)>0:
             actualizar_proyectos(actualizar_tarjetas, trello)
             print("\tEstatus Actualizados")
+        
        
 def main():
     while True:
