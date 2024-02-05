@@ -3,6 +3,8 @@ import datetime
 import time
 import json
 
+import requests
+
 with open('tableros.json') as f:
     tableros = json.load(f)
 with open('listas.json') as f:
@@ -16,16 +18,7 @@ headers_sytex = {
     'Organization' : '185'
 }
 
-estado_lista = {
-    "01-Solicitud Comercial": "657c7536339e982ac6c3563b",
-    "02-En Proyeccion" : "657b5f4e493588d965d8ac9c",
-    "03-Desarrollo de Informes":"657c6d705e57f03a9f88a5aa",
-    "04-Por Despachar":"657b5f66daa64699072ecfe5",
-    "05-Ejecucion": "657b5f6b553f8adbf6afb73d",
-    "06-Recibido de Obra":"657b5f75a8de7a55cfbd2c48",
-    "07-Documentacion":"657b5f842130237dd5dcf658",
-    "08-Por Pagar":"657b5f86dd04cf5ff2ae4d79"
-}
+
 query_trello = {
   'key': '259afd2122eef1ba77bfd053dc33db85',
   'token': 'ATTA335c69a399952c29b22440cc51ed488124e6d6491bdd47d143a5f20c5296b87255E6AEB8'
@@ -76,8 +69,13 @@ def obtener_cartas(sucursal):
 
 
 
-difference = lambda a, b: [x for x in a if x['name'] not in [y['name'] for y in b]]
-intersects = lambda a, b: [x for x in a if x['name'] in [y['name'] for y in b]]
+
+lista_proyectos_nuevos = lambda a, b: [x for x in a if x['name'] not in [y['name'] for y in b]]
+
+
+lista_actualizacion_cartas = lambda a, b: [x for x in a if x['name'] in [y['name'] for y in b]]
+
+
 
 def find(name, array):
     for a in array:
@@ -87,9 +85,10 @@ def find(name, array):
 
 
 
-def sytex_to_trello(sytex, trello):   
-    new_card = difference(sytex, trello)
-    update_cards = intersects(sytex, trello)
+def sytex_to_trello(sytex, trello):  
+    new_card = lista_proyectos_nuevos(sytex, trello)
+    update_cards = lista_actualizacion_cartas(sytex, trello)
+    print(new_card)
     for card in update_cards:
         c = find(card['name'], trello)
         #if c['idList'] == card['idList']: continue
@@ -131,22 +130,23 @@ def sytex_to_trello(sytex, trello):
         pass
     print('Creado nuevos proyectos')
 
+#   CREAR
+#   PROYECTOS
+#   SYTEX
 
-def crear_desde_solicitudes(sytex, trello, sucursal):
-    solicitudes_nuevas = difference(trello, sytex)
-    r = len(solicitudes_nuevas)
-    print(r)
-    for solicitud in solicitudes_nuevas:
-        if solicitud['idList'] != listas[sucursal]['01-Solicitud Comercial']:continue
-        zona = f"{sucursal}-{solicitud['name']}"
-        query = {
+def crear_elemento_red(zona):
+    #zona = f"{sucursal}-{solicitud['name']}"
+    query = {
             'code' : zona,
             'description': zona,
             'ne_type' : 314,
             'Organization': 185
         }
-        requests.post("https://app.sytex.io/api/networkelement/", json = query, headers= headers_sytex)
-        query = {
+    requests.post("https://app.sytex.io/api/networkelement/", json = query, headers= headers_sytex)
+
+def crear_proyecto(zona):
+    #zona = f"{sucursal}-{solicitud['name']}"
+    query = {
             'name' : zona,
             'operational_unit': "283",
             'client': "26421",
@@ -154,28 +154,109 @@ def crear_desde_solicitudes(sytex, trello, sucursal):
             'country': 241,
             'status': 1
         }
-        requests.post("https://app.sytex.io/api/project/", json = query, headers= headers_sytex)
-        query = {
+    requests.post("https://app.sytex.io/api/project/", json = query, headers= headers_sytex)
+
+def crear_workflow(zona):
+    
+    query = {
             'network_element' :zona,
             'project': zona,
             'template': "WST-0527",
             '_class' : 'importer'
         }
-        requests.post("https://app.sytex.io/api/import/WorkStructureImport/go/", json = query, headers= headers_sytex)
-    
-    
-    return r
+    res = requests.post("https://app.sytex.io/api/import/WorkStructureImport/go/", json = query, headers= headers_sytex)
+    res = res.json()
+    if 'code' not in res.keys():
+        print(zona, res)
+    print(res['code'])
+    res = requests.get(f"https://app.sytex.io/api/workstructure/?q={res['code']}", headers=headers_sytex)
+    res = res.json()['results'][0]
+    print(res['_url_display'])
+    return f"https://app.sytex.io/o/185/{res['_url_display']}"
 
-def main():
-    sucursales = ['pzo','TGR', 'AAO', 'TBR', 'CDB', 'VAL']
+def actualizar_description_proyectos(sucursal, description, id):
+    idList = listas[sucursal]['01-Solicitud Comercial']
+    query = {
+            'desc' : description,
+            'idList': idList,
+            'key': '259afd2122eef1ba77bfd053dc33db85',
+            'token': 'ATTA335c69a399952c29b22440cc51ed488124e6d6491bdd47d143a5f20c5296b87255E6AEB8'    
+        }
+    res = requests.request(
+            "PUT",
+            f"https://api.trello.com/1/cards/{id}",
+            headers={
+                "Accept": "application/json"
+            },
+            params=query
+        )
+
+def ejecutar_proyecto(sucursal, solicitud):
+    zona = f"{sucursal}-{solicitud['name']}"
+    print(zona)
+    crear_elemento_red(zona)
+    crear_proyecto(zona)
+
+
+    description = crear_workflow(zona)
+    actualizar_description_proyectos(sucursal, description, solicitud['id'])
+    
+
+def crear_nuevos_proyectos(proyectos_nuevos,sucursal):
+    
+    [
+        ejecutar_proyecto(sucursal, solicitud) for solicitud in proyectos_nuevos if solicitud['idList'] == listas[sucursal]['01-Solicitud Comercial'] 
+    ]
+
+
+#   ACTUALIZAR
+#   ESTATUS
+#   TRELLO
+def cambiar_estado(solicitud, id):
+    url = f"https://api.trello.com/1/cards/{id}"
+    headers = {
+            "Accept": "application/json"
+        }
+    query = {
+            'name': solicitud['name'],
+            'idList': solicitud['idList'],
+            'desc' : solicitud['desc'],
+            'key': '259afd2122eef1ba77bfd053dc33db85',
+            'token': 'ATTA335c69a399952c29b22440cc51ed488124e6d6491bdd47d143a5f20c5296b87255E6AEB8'   
+        }
+    requests.request(
+            "PUT",
+            url,
+            headers=headers,
+            params=query
+        )
+def actualizar(solicitud, trello):
+    print(solicitud)
+    id = find(solicitud['name'], trello)['id']
+    cambiar_estado(solicitud, id)
+    pass
+def actualizar_proyectos(actualizar_tarjetas, trello):
+    for solicitud in actualizar_tarjetas: actualizar(solicitud, trello)
+#   MAIN
+
+def exe():
+    sucursales = ['AAO', 'pzo', 'TBR', 'TGR', 'VAL', 'CDB']
     for sucursal in sucursales:
         print(sucursal)
         sytex = obtener_proyectos(sucursal)
         trello = obtener_cartas(sucursal)
-        r = crear_desde_solicitudes(sytex, trello, sucursal)
-        if r> 0:
-            sytex = obtener_proyectos(sucursal)
-        sytex_to_trello(sytex, trello)
-while True:
+
+        proyectos_nuevos = lista_proyectos_nuevos(sytex, trello)
+        actualizar_tarjetas = lista_actualizacion_cartas(sytex, trello)
+        if len(proyectos_nuevos) > 0:
+            print("\tCreando Proyectos")
+            crear_nuevos_proyectos(proyectos_nuevos,sucursal)
+        if len(actualizar_tarjetas)>0:
+            actualizar_proyectos(actualizar_tarjetas, trello)
+            print("\tEstatus Actualizados")
+       
+def main():
+    while True:
+        exe()
+if __name__ == "__main__":
     main()
-    time.sleep(60)
