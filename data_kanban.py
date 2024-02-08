@@ -253,7 +253,6 @@ def exe():
         
        
 def main():
-    while True:
-        exe()
+    exe()
 if __name__ == "__main__":
     main()
