@@ -12,26 +12,28 @@
     "pzo" : {
         "01-Solicitud Comercial": "65a9c69897d085cb3eb3d7d6",
         "02-En Proyeccion" : "65a9c6a44e6f11e85639edc1",
-        "03-Desarrollo de Informes":"65a9c6ac2b69beebef5d64ce",
-        "04-Por Despachar":"65a9c6b2c4235be27d99e147",
-        "05-Ejecucion": "65a9c6b8067f9d95779cde59",
-        "06-Recibido de Obra":"65a9c6bf8885f783dc9037b7",
-        "07-Documentacion":"65a9c6c53c90446e78188250",
-        "08-Por Pagar":"65a9c6cc5fc9a30a12ed5323"
+        "03-Revision Tecnica":"65ccfccd44ccd1156b784b94",
+        "04-Desarrollo de Informes":"65a9c6ac2b69beebef5d64ce",
+        "05-Por Despachar":"65a9c6b2c4235be27d99e147",
+        "06-Ejecucion": "65a9c6b8067f9d95779cde59",
+        "07-Recibido de Obra":"65a9c6bf8885f783dc9037b7",
+        "08-Documentacion":"65a9c6c53c90446e78188250",
+        "09-Por Pagar":"65a9c6cc5fc9a30a12ed5323"
     }, 
     "AAO" : {
         "01-Solicitud Comercial": "65b3ffd46792768361b99065",
         "02-En Proyeccion" : "65a7f3f55f8ca49a15a93648",
-        "03-Desarrollo de Informes":"65a7f3fc52a0973282a54ccb",
-        "04-Por Despachar":"65a7f404ff22d5871f3a200f",
-        "05-Ejecucion": "65a7f40bf4135367916cc150",
-        "06-Recibido de Obra":"65a7f414196e650c26ea1160",
-        "07-Documentacion":"65a7f41c118c929dda53bb36",
-        "08-Por Pagar":"65a7f4251867d6eadfa4875b"
+        "04-Desarrollo de Informes":"65a7f3fc52a0973282a54ccb",
+        "05-Por Despachar":"65a7f404ff22d5871f3a200f",
+        "06-Ejecucion": "65a7f40bf4135367916cc150",
+        "07-Recibido de Obra":"65a7f414196e650c26ea1160",
+        "08-Documentacion":"65a7f41c118c929dda53bb36",
+        "09-Por Pagar":"65a7f4251867d6eadfa4875b"
     },
     "TGR" : {
         "01-Solicitud Comercial"   : "65a7f5619ffab64ba18c0bb5",
         "02-En Proyeccion"         : "65a7f568bfcde46a87cac6e4",
+        "03-Revision Tecnica"      : "65ce8e639a19d9120c03a47b",
         "03-Desarrollo de Informes": "65a7f56e9371e0660fcb4064",
         "04-Por Despachar"         : "65a7f575e51ccb76fbe8a39a",
         "05-Ejecucion"             : "65a7f57eccf6a3869129fef5",
@@ -42,31 +44,34 @@
     "CDB" : {
         "01-Solicitud Comercial": "65a7f45b1efb8f9f7d4137a1",
         "02-En Proyeccion" : "65a7f4624f7666aee41d5b92",
-        "03-Desarrollo de Informes":"65a7f4f1744481e56f2c5bf1",
-        "04-Por Despachar":"65a7f4f97f72d26d969c1a91",
-        "05-Ejecucion": "65a7f5207b6ce6cccfa5e73d",
-        "06-Recibido de Obra":"65a7f5294c00ee7b748281fa",
-        "07-Documentacion":"65a7f5309917661f5acb7da5",
-        "08-Por Pagar":"65a7f538b03766f8d5f7f2d1"
+        "03-Revision Tecnica":"65ccff13c3588877947e3e83",
+        "04-Desarrollo de Informes":"65a7f4f1744481e56f2c5bf1",
+        "05-Por Despachar":"65a7f4f97f72d26d969c1a91",
+        "06-Ejecucion": "65a7f5207b6ce6cccfa5e73d",
+        "07-Recibido de Obra":"65a7f5294c00ee7b748281fa",
+        "08-Documentacion":"65a7f5309917661f5acb7da5",
+        "09-Por Pagar":"65a7f538b03766f8d5f7f2d1"
     },
     "TBR" : {
         "01-Solicitud Comercial": "65a7f3611495895d992db6fd",
-    "02-En Proyeccion" : "65a7f3698aecb41c5e0881a4",
-    "03-Desarrollo de Informes":"65a7f372c12d18d5623721ee",
-    "04-Por Despachar":"65a7f37977887c63fc397fe2",
-    "05-Ejecucion": "65a7f3825bc16d3cf5d451c6",
-    "06-Recibido de Obra":"65a7f38bd66c2312814b8a8d",
-    "07-Documentacion":"65a7f39373bbec36513dd26d",
-    "08-Por Pagar":"65a7f39abe2ed5fa8fa08b15"
+        "02-En Proyeccion" : "65a7f3698aecb41c5e0881a4",
+        "03-Revision Tecnica":"65ccffbc4e0130a25d38bafd",
+        "04-Desarrollo de Informes":"65a7f372c12d18d5623721ee",
+        "05-Por Despachar":"65a7f37977887c63fc397fe2",
+        "06-Ejecucion": "65a7f3825bc16d3cf5d451c6",
+        "07-Recibido de Obra":"65a7f38bd66c2312814b8a8d",
+        "08-Documentacion":"65a7f39373bbec36513dd26d",
+        "09-Por Pagar":"65a7f39abe2ed5fa8fa08b15"
     },
     "VAL" : {
         "01-Solicitud Comercial": "65a7f5a33b0d35cb57d95196",
         "02-En Proyeccion" : "65a7f5a90089856459704eb1",
-        "03-Desarrollo de Informes":"65a7f65f8bc92c6be27c9c21",
-        "04-Por Despachar":"65a7f665103191053e25b965",
-        "05-Ejecucion": "65a7f66d863a1aaf65806c81",
-        "06-Recibido de Obra":"65a7f6742c59b35c7c07ec4d",
-        "07-Documentacion":"65a7f67a5060279e5257f5d4",
-        "08-Por Pagar":"65a7f6992ab4e7a4db6b04b5"
+        "03-Revision Tecnica":"65cd0047f41f1f1b27555921",
+        "04-Desarrollo de Informes":"65a7f65f8bc92c6be27c9c21",
+        "05-Por Despachar":"65a7f665103191053e25b965",
+        "06-Ejecucion": "65a7f66d863a1aaf65806c81",
+        "07-Recibido de Obra":"65a7f6742c59b35c7c07ec4d",
+        "08-Documentacion":"65a7f67a5060279e5257f5d4",
+        "09-Por Pagar":"65a7f6992ab4e7a4db6b04b5"
     }
 }

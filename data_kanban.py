@@ -234,7 +234,7 @@ def actualizar_proyectos(actualizar_tarjetas, trello):
 from pprint import pprint
 def exe():
     sucursales = ['AAO', 'pzo', 'TBR', 'TGR', 'VAL', 'CDB']
-    #sucursales = ['AAO']
+    #sucursales = ['pzo']
     
     for sucursal in sucursales:
         print(sucursal)
