@@ -83,55 +83,15 @@ def find(name, array):
             return a
     return {}
 
-
-
-def sytex_to_trello(sytex, trello):  
-    new_card = lista_proyectos_nuevos(sytex, trello)
-    update_cards = lista_actualizacion_cartas(sytex, trello)
-    for card in update_cards:
-        c = find(card['name'], trello)
-        #if c['idList'] == card['idList']: continue
-        url = f"https://api.trello.com/1/cards/{c['id']}"
-        headers = {
-            "Accept": "application/json"
-        }
-        query = {
-            'idList': card['idList'],
-            'desc' : card['desc'],
-            'key': '259afd2122eef1ba77bfd053dc33db85',
-            'token': 'ATTA335c69a399952c29b22440cc51ed488124e6d6491bdd47d143a5f20c5296b87255E6AEB8'   
-        }
-        requests.request(
-            "PUT",
-            url,
-            headers=headers,
-            params=query
-        )
-    print('Actualizado los proyectos')
-    for card in new_card:
-        url = "https://api.trello.com/1/cards"
-        headers = {
-            "Accept": "application/json"
-        }
-        query = {
-            'name' : card['name'],
-            'desc' : card['desc'],
-            'idList': card['idList'],
-            'key': '259afd2122eef1ba77bfd053dc33db85',
-            'token': 'ATTA335c69a399952c29b22440cc51ed488124e6d6491bdd47d143a5f20c5296b87255E6AEB8'    
-        }
-        requests.request(
-            "POST",
-            url,
-            headers=headers,
-            params=query
-        )
-        pass
-    print('Creado nuevos proyectos')
-
 #   CREAR
 #   PROYECTOS
 #   SYTEX
+
+def project_exists(project_name):
+    url = f"https://app.sytex.io/api/project/?q={project_name}"
+    response = requests.get(url, headers= headers_sytex)
+    data = response.json()
+    return data['count'] > 0
 
 def crear_elemento_red(zona):
     #zona = f"{sucursal}-{solicitud['name']}"
@@ -186,8 +146,13 @@ def actualizar_description_proyectos(sucursal, description, id):
             params=query
         )
 
+
 def ejecutar_proyecto(sucursal, solicitud):
     zona = f"{sucursal}-{solicitud['name']}"
+    if project_exists(zona):
+        return
+
+
     crear_elemento_red(zona)
     crear_proyecto(zona)
 
