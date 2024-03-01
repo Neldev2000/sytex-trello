@@ -210,6 +210,7 @@ def exe():
         actualizar_tarjetas = lista_actualizacion_cartas(sytex, trello)
         
         if len(proyectos_nuevos) > 0:
+            # test
             print("\tCreando Proyectos")
             crear_nuevos_proyectos(proyectos_nuevos,sucursal)
         if len(actualizar_tarjetas)>0:
